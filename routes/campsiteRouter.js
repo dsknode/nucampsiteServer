@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const Campsite = require('../models/campsite');
 
 const campsiteRouter = express.Router();
-
 campsiteRouter.use(bodyParser.json());
+
+
+
 
 campsiteRouter.route('/')
   .get((req, res, next) => {
@@ -39,6 +41,10 @@ campsiteRouter.route('/')
       })
       .catch(err => next(err));
   });
+
+
+
+
 
 campsiteRouter.route('/:campsiteId')
   .get((req, res, next) => {
