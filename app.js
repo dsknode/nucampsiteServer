@@ -1,21 +1,24 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-//var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
-
+const passport = require('passport');
+const authenticate = require('./authenticate');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//-----
 const campsiteRouter = require('./routes/campsiteRouter');
 const partnerRouter = require('./routes/partnerRouter');
 const promotionRouter = require('./routes/promotionRouter');
 
+// how to do this?????
+// let { usersRouter, campsiteRouter, partnerRouter, promotionRouter } = require('./routes')
+
 // connect to mongo db server
-const mongoose = require('mongoose');
+mongoose = require('mongoose');
 const url = 'mongodb://localhost:27017/nucampsite';
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
@@ -46,21 +49,19 @@ app.use(session({
   store: new FileStore()
 }));
 
-function auth(req, res, next) {
-  console.log(req.session);
+app.use(passport.initialize());
+app.use(passport.session());
 
-  if (!req.session.user) {
-      const err = new Error('You are not authenticated!');
+
+function auth(req, res, next) {
+  console.log(req.user);
+
+  if (!req.user) {
+      const err = new Error('You are not authenticated!');                    
       err.status = 401;
       return next(err);
   } else {
-      if (req.session.user === 'authenticated') {
-          return next();
-      } else {
-          const err = new Error('You are not authenticated!');
-          err.status = 401;
-          return next(err);
-      }
+      return next();
   }
 }
 
@@ -93,3 +94,6 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+// how does it recognize yorue on a 
+// different machine with this secret?
