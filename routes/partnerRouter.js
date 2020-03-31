@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", authenticate.verifyUser, (req, res) => {
+router.post("/", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Partner.create(req.body)
     .then(partner => {
       res.send(partner);
@@ -26,7 +26,7 @@ router.put("/", authenticate.verifyUser, (req, res) => {
   res.end("put not supported");
 });
 
-router.delete("/", authenticate.verifyUser, (req, res) => {
+router.delete("/", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Partner.deleteMany()
     .then(response => {
       res.send(response);
@@ -42,7 +42,7 @@ router.get("/:partnerId", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.post("/:partnerId", authenticate.verifyUser, (req, res) => {
+router.post("/:partnerId", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   res
     .status(403)
     .send(`POST operation not supported on /partners/${req.params.partnerId}`);
@@ -62,7 +62,7 @@ router.put("/:partnerId", authenticate.verifyUser, (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.delete("/:partnerId", authenticate.verifyUser, (req, res) => {
+router.delete("/:partnerId", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Partner.findByIdAndDelete(req.params.partnerId)
     .then(partner => {
       res.send(partner);

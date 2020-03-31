@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", authenticate.verifyUser, (req, res) => {
+router.post("/", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Promotion.create(req.body)
     .then(promotion => {
       res.send(promotion);
@@ -25,7 +25,7 @@ router.put("/", authenticate.verifyUser, (req, res) => {
   res.status(403).send("Put not supported");
 });
 
-router.delete("/", authenticate.verifyUser, (req, res) => {
+router.delete("/", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Promotion.deleteMany()
     .then(response => {
       res.send(response);
@@ -42,7 +42,7 @@ router.get("/:promotionId", (req, res) => {
   });
 });
 
-router.post("/:promotionId", authenticate.verifyUser, (req, res) => {
+router.post("/:promotionId", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   res
     .status(403)
     .send(
@@ -64,7 +64,7 @@ router.put("/:promotionId", authenticate.verifyUser, (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.delete("/:promotionId", authenticate.verifyUser, (req, res) => {
+router.delete("/:promotionId", authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
   Promotion.findByIdAndDelete(req.params.promotionId)
     .then(promotion => {
       res.send(promotion);

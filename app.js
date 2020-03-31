@@ -9,11 +9,11 @@ const config = require("./config");
 const passport = require("passport");
 const app = express();
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const campsiteRouter = require("./routes/campsiteRouter");
-const partnerRouter = require("./routes/partnerRouter");
-const promotionRouter = require("./routes/promotionRouter");
+const { usersRouter, campsiteRouter, partnerRouter, promotionRouter } = require("./routes/index");
+// const usersRouter = require("./routes/users");
+// const campsiteRouter = require("./routes/campsiteRouter");
+// const partnerRouter = require("./routes/partnerRouter");
+// const promotionRouter = require("./routes/promotionRouter");
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
@@ -38,7 +38,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
