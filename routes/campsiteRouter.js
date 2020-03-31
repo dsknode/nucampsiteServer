@@ -185,14 +185,15 @@ campsiteRouter
     Campsite.findById(req.params.campsiteId)
       .then(campsite => {
         let currentUser = req.user._id;
-        let targetCommentAuthor = campsite.comments.id(req.params.commentId)
-          .author._id;
+        let targetCommentAuthor = campsite.comments.id(req.params.commentId).author._id;
+        let currentUserAdminStatus = req.user.admin;
 
-        if (campsite && campsite.comments.id(req.params.commentId)) {
-          if (currentUser.equals(targetCommentAuthor)) {
+        if (campsite && campsite.comments.id(req.params.commentId)){
+
+          if (currentUser.equals(targetCommentAuthor) || currentUserAdminStatus) {
+
             if (req.body.rating) {
-              campsite.comments.id(req.params.commentId).rating =
-                req.body.rating;
+              campsite.comments.id(req.params.commentId).rating = req.body.rating;
             }
 
             if (req.body.text) {
@@ -205,7 +206,7 @@ campsiteRouter
                 res.send(campsite);
               })
               .catch(err => next(err));
-          } else {
+          }else{
             let err = new Error(`Mismatch author and user`);
             err.status = 404;
             return next(err);
@@ -228,11 +229,12 @@ campsiteRouter
     (req, res, next) => {
       Campsite.findById(req.params.campsiteId)
         .then(campsite => {
-          if (campsite && campsite.comments.id(req.params.commentId)) {
-            let currentUser = req.user._id;
-            let targetCommentAuthor = campsite.comments.id(req.params.commentId).author._id;
+          let currentUser = req.user._id;
+          let targetCommentAuthor = campsite.comments.id(req.params.commentId).author._id;
+          let currentUserAdminStatus = req.user.admin;
 
-            if (campsite && campsite.comments.id(req.params.commentId)) {
+          if (campsite && campsite.comments.id(req.params.commentId)) {
+            if (currentUser.equals(targetCommentAuthor) || currentUserAdminStatus) {
               campsite.comments.pull(req.params.commentId);
 
               campsite
@@ -241,6 +243,10 @@ campsiteRouter
                   res.send(campsite);
                 })
                 .catch(err => next(err));
+            }else{
+              let err = new Error(`Mismatch author and user`);
+              err.status = 404;
+              return next(err);
             }
           } else if (!campsite) {
             err = new Error(`Campsite ${req.params.campsiteId} not found`);
