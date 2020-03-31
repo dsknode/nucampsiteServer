@@ -47,11 +47,15 @@ exports.verifyAdmin = (req, res, next) => {
   }
 }
 
-exports.verifyAuthor = (req, res, next) => {
-  if (req.user.username === campsite.comments.id(req.params.commentId).author){
-    return next();
-    //username and author are both encoded
-  }
-}
+// exports.verifyAuthor = (req, res, next) => {
+//   if (req.user.username._id === campsite.comments.id(req.params.commentId).author._id){
+//     return next();
+//     //username and author are both encoded
+//   }else{
+//     err = new Error(`you are not authorized to perform this edit`);
+//     err.status = 403;
+//     return next(err);
+//   }
+// }
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
