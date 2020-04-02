@@ -7,14 +7,11 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const config = require("./config");
 const passport = require("passport");
-const app = express();
-
 const { usersRouter, campsiteRouter, partnerRouter, promotionRouter } = require("./routes/index");
 // const usersRouter = require("./routes/users");
 // const campsiteRouter = require("./routes/campsiteRouter");
 // const partnerRouter = require("./routes/partnerRouter");
 // const promotionRouter = require("./routes/promotionRouter");
-
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
@@ -22,9 +19,22 @@ const connect = mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-
 connect.then(() => {
   console.log("Connected correctly to server"), err => console.log(err);
+});
+
+
+
+
+const app = express();
+// Secure traffic only
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  } else {
+      console.log(`Redirecting to: https://${req.hostname}:${app.get('secPort')}${req.url}`);
+      res.redirect(301, `https://${req.hostname}:${app.get('secPort')}${req.url}`);
+  }
 });
 
 // view engine setup
