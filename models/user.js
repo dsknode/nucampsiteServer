@@ -7,6 +7,9 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  facebookId: {
+    type: String
+  },
   firstName: {
     type: String,
     default: ""
