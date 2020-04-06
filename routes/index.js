@@ -12,5 +12,6 @@ const usersRouter = require("./users");
 const campsiteRouter = require("./campsiteRouter");
 const partnerRouter = require("./partnerRouter");
 const promotionRouter = require("./promotionRouter");
+const favoriteRouter = require("./favoriteRouter");
 
 module.exports = { usersRouter, campsiteRouter, partnerRouter, promotionRouter }

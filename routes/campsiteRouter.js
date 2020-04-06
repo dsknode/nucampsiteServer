@@ -31,14 +31,14 @@ campsiteRouter
   })
   .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     authenticate.verifyUser,
-      authenticate.verifyAdmin,
-      (req, res, next) => {
-        Campsite.deleteMany()
-          .then(response => {
-            res.send(response);
-          })
-          .catch(err => next(err));
-      }
+    authenticate.verifyAdmin,
+    (req, res, next) => {
+      Campsite.deleteMany()
+        .then(response => {
+          res.send(response);
+        })
+        .catch(err => next(err));
+    }
   }
   );
 
